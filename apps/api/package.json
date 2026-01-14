@@ -1,0 +1,63 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "description": "A blank template to get started with Payload 3.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "test": "pnpm run test:int && pnpm run test:e2e",
+    "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --no-experimental-strip-types\" pnpm exec playwright test",
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+  },
+  "dependencies": {
+    "@payloadcms/next": "3.70.0",
+    "@payloadcms/richtext-lexical": "3.70.0",
+    "@payloadcms/ui": "3.70.0",
+    "cross-env": "^10.1.0",
+    "dotenv": "17.2.3",
+    "graphql": "^16.12.0",
+    "next": "16.1.1",
+    "payload": "3.70.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "sharp": "0.34.5",
+    "@payloadcms/db-postgres": "3.70.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.57.0",
+    "@testing-library/react": "16.3.1",
+    "@types/node": "^25.0.7",
+    "@types/react": "19.2.8",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.1.2",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.1.1",
+    "jsdom": "27.4.0",
+    "playwright": "1.57.0",
+    "playwright-core": "1.57.0",
+    "prettier": "^3.7.4",
+    "typescript": "5.9.3",
+    "vite-tsconfig-paths": "6.0.4",
+    "vitest": "4.0.17"
+  },
+  "engines": {
+    "node": "^18.20.2 || >=20.9.0",
+    "pnpm": "^9 || ^10"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
+  "packageManager": "pnpm@10.28.0+sha512.05df71d1421f21399e053fde567cea34d446fa02c76571441bfc1c7956e98e363088982d940465fd34480d4d90a0668bc12362f8aa88000a64e83d0b0e47be48"
+}
