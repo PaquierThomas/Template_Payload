@@ -47,9 +47,6 @@ COPY --from=builder --chown=payloaduser:nodejs /app/next.config.* ./
 COPY --from=builder --chown=payloaduser:nodejs /app/payload.config.ts ./payload.config.ts
 COPY --from=builder --chown=payloaduser:nodejs /app/src ./src
 
-# Copier public si existe
-COPY --from=builder --chown=payloaduser:nodejs /app/public ./public 2>/dev/null || true
-
 USER payloaduser
 
 # Exposer le port
