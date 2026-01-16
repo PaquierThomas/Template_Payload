@@ -53,5 +53,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Démarrer avec Next.js start
-CMD ["bun", "run", "start"]
+# Démarrer avec next start directement
+CMD ["bun", "next", "start"]
