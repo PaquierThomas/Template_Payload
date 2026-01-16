@@ -26,6 +26,9 @@ COPY apps/api ./
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN bun run build
 
+# Créer le dossier public s'il n'existe pas (pour éviter les erreurs de copie)
+RUN mkdir -p /app/public
+
 # Étape 3: Image de production
 FROM base AS runner
 WORKDIR /app
@@ -41,6 +44,8 @@ RUN groupadd --system --gid 1001 nodejs && \
 COPY --from=builder --chown=payloaduser:nodejs /app/public ./public
 COPY --from=builder --chown=payloaduser:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=payloaduser:nodejs /app/.next/static ./.next/static
+
+USER payloaduser
 
 USER payloaduser
 
