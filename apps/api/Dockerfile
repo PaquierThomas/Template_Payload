@@ -1,37 +1,28 @@
 # Utiliser l'image officielle Bun
 FROM oven/bun:1 AS base
 
-# Étape 1: Installation des dépendances du monorepo
+# Étape 1: Installation des dépendances
 FROM base AS deps
-WORKDIR /repo
+WORKDIR /app
 
-# Copier les fichiers workspace de la racine
-COPY package.json ./
-# Copier le lockfile (bun.lock sur Windows, bun.lockb sur Linux)
-COPY bun.lock* bun.lockb* ./
+# Copier SEULEMENT les fichiers de l'app API
+COPY apps/api/package.json ./
+COPY apps/api/bun.lock* ./
 
-# Copier les package.json de tous les workspaces
-COPY apps/api/package.json ./apps/api/
-
-# Installer toutes les dépendances du monorepo
+# Installer les dépendances
 RUN bun install --frozen-lockfile
 
 # Étape 2: Build de l'application
 FROM base AS builder
-WORKDIR /repo
+WORKDIR /app
 
 # Copier les node_modules depuis l'étape deps
-COPY --from=deps /repo/node_modules ./node_modules
-COPY --from=deps /repo/apps/api/node_modules ./apps/api/node_modules
+COPY --from=deps /app/node_modules ./node_modules
 
-# Copier le code source de l'API
-COPY apps/api ./apps/api
+# Copier tout le code source de l'API
+COPY apps/api ./
 
-# Copier aussi le package.json racine pour Next.js
-COPY package.json ./
-
-# Se placer dans le dossier API et build
-WORKDIR /repo/apps/api
+# Build de l'application Next.js/Payload
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN bun run build
 
@@ -47,9 +38,9 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 payloaduser
 
 # Copier les fichiers nécessaires depuis le builder
-COPY --from=builder --chown=payloaduser:nodejs /repo/apps/api/public ./public
-COPY --from=builder --chown=payloaduser:nodejs /repo/apps/api/.next/standalone ./
-COPY --from=builder --chown=payloaduser:nodejs /repo/apps/api/.next/static ./.next/static
+COPY --from=builder --chown=payloaduser:nodejs /app/public ./public
+COPY --from=builder --chown=payloaduser:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=payloaduser:nodejs /app/.next/static ./.next/static
 
 USER payloaduser
 

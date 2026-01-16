@@ -11,7 +11,5 @@ coverage
 .vscode
 .idea
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 .DS_Store
+# Ne PAS ignorer bun.lock
