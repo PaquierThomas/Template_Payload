@@ -5,12 +5,12 @@ FROM oven/bun:1 AS base
 FROM base AS deps
 WORKDIR /app
 
-# Copier SEULEMENT les fichiers de l'app API
+# Copier les fichiers de l'app API
 COPY apps/api/package.json ./
 COPY apps/api/bun.lock* ./
 
 # Installer les dépendances
-RUN bun install --frozen-lockfile
+RUN bun install --frozen-lockfile --production=false
 
 # Étape 2: Build de l'application
 FROM base AS builder
@@ -26,9 +26,6 @@ COPY apps/api ./
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN bun run build
 
-# Créer le dossier public s'il n'existe pas (pour éviter les erreurs de copie)
-RUN mkdir -p /app/public
-
 # Étape 3: Image de production
 FROM base AS runner
 WORKDIR /app
@@ -40,12 +37,17 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs payloaduser
 
-# Copier les fichiers nécessaires depuis le builder
+# Copier tous les fichiers nécessaires
+COPY --from=builder --chown=payloaduser:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=payloaduser:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=payloaduser:nodejs /app/.next ./.next
 COPY --from=builder --chown=payloaduser:nodejs /app/public ./public
-COPY --from=builder --chown=payloaduser:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=payloaduser:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=payloaduser:nodejs /app/next.config.* ./
 
-USER payloaduser
+# Copier aussi les fichiers Payload nécessaires
+COPY --from=builder --chown=payloaduser:nodejs /app/payload.config.ts ./payload.config.ts
+COPY --from=builder --chown=payloaduser:nodejs /app/collections ./collections
+COPY --from=builder --chown=payloaduser:nodejs /app/src ./src
 
 USER payloaduser
 
@@ -55,5 +57,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Démarrer l'application avec Bun
-CMD ["bun", "run", "server.js"]
+# Démarrer avec Next.js start au lieu du server.js standalone
+CMD ["bun", "run", "start"]

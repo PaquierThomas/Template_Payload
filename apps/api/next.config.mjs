@@ -2,9 +2,7 @@ import { withPayload } from '@payloadcms/next/withPayload'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // IMPORTANT: Activer le mode standalone pour Docker
-  output: 'standalone',
-  
+  // Retirez output: 'standalone' pour Payload
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],
