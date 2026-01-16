@@ -9,7 +9,7 @@ WORKDIR /app
 COPY apps/api/package.json ./
 COPY apps/api/bun.lock* ./
 
-# Installer les dépendances (sans le flag --production pour installer toutes les dépendances)
+# Installer les dépendances
 RUN bun install --frozen-lockfile
 
 # Étape 2: Build de l'application
@@ -33,21 +33,22 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Créer un utilisateur non-root (syntaxe Debian)
+# Créer un utilisateur non-root
 RUN groupadd --system --gid 1001 nodejs && \
     useradd --system --uid 1001 --gid nodejs payloaduser
 
-# Copier tous les fichiers nécessaires
+# Copier les fichiers essentiels
 COPY --from=builder --chown=payloaduser:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=payloaduser:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=payloaduser:nodejs /app/.next ./.next
-COPY --from=builder --chown=payloaduser:nodejs /app/public ./public
 COPY --from=builder --chown=payloaduser:nodejs /app/next.config.* ./
 
-# Copier aussi les fichiers Payload nécessaires
+# Copier les fichiers Payload
 COPY --from=builder --chown=payloaduser:nodejs /app/payload.config.ts ./payload.config.ts
-COPY --from=builder --chown=payloaduser:nodejs /app/collections ./collections
 COPY --from=builder --chown=payloaduser:nodejs /app/src ./src
+
+# Copier public si existe
+COPY --from=builder --chown=payloaduser:nodejs /app/public ./public 2>/dev/null || true
 
 USER payloaduser
 
