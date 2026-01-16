@@ -33,9 +33,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Créer un utilisateur non-root
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 payloaduser
+# Créer un utilisateur non-root (syntaxe Debian)
+RUN groupadd --system --gid 1001 nodejs && \
+    useradd --system --uid 1001 --gid nodejs payloaduser
 
 # Copier les fichiers nécessaires depuis le builder
 COPY --from=builder --chown=payloaduser:nodejs /app/public ./public
