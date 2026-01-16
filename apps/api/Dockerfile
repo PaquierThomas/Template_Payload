@@ -43,8 +43,7 @@ COPY --from=builder --chown=payloaduser:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=payloaduser:nodejs /app/.next ./.next
 COPY --from=builder --chown=payloaduser:nodejs /app/next.config.* ./
 
-# Copier les fichiers Payload
-COPY --from=builder --chown=payloaduser:nodejs /app/payload.config.ts ./payload.config.ts
+# Copier tout le dossier src (qui contient payload.config.ts et collections)
 COPY --from=builder --chown=payloaduser:nodejs /app/src ./src
 
 USER payloaduser
