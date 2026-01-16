@@ -9,8 +9,8 @@ WORKDIR /app
 COPY apps/api/package.json ./
 COPY apps/api/bun.lock* ./
 
-# Installer les dépendances
-RUN bun install --frozen-lockfile --production=false
+# Installer les dépendances (sans le flag --production pour installer toutes les dépendances)
+RUN bun install --frozen-lockfile
 
 # Étape 2: Build de l'application
 FROM base AS builder
@@ -53,9 +53,8 @@ USER payloaduser
 
 # Exposer le port
 EXPOSE 3000
-
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Démarrer avec Next.js start au lieu du server.js standalone
+# Démarrer avec Next.js start
 CMD ["bun", "run", "start"]
