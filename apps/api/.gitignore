@@ -9,6 +9,10 @@
 /.idea/*
 !/.idea/runConfigurations
 
+# Payload generated files
+src/app/(payload)/admin/importMap.js
+payload-types.ts
+
 # testing
 /coverage
 
