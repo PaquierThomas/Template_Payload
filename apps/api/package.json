@@ -5,9 +5,11 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env BUILD=true payload generate:types && payload generate:importmap && next build",
+    "build": "cross-env BUILD=true payload generate:types && payload generate:importmap && payload migrate && next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start -p ${PORT:-3000}",
+    "migrate": "payload migrate",
+    "migrate:create": "payload migrate:create",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",

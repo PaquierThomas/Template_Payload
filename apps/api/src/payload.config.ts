@@ -4,14 +4,12 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
-
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import  Posts  from "./collections/Posts";
+import Posts from "./collections/Posts"
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-// First, set a variable to check if we're in the build phase
 const isBuild = process.env.BUILD === "true"
 
 export default buildConfig({
@@ -34,7 +32,8 @@ export default buildConfig({
           ? process.env.BUILD_DATABASE || ''
           : process.env.DATABASE_URL || '',
     },
-     push: true,
+    // ✅ Utilisez migrationDir pour des migrations persistantes
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   sharp,
   plugins: [],
