@@ -33,7 +33,7 @@ export default buildConfig({
           : process.env.DATABASE_URL || '',
     },
     // ✅ Utilisez migrationDir pour des migrations persistantes
-    migrationDir: path.resolve(dirname, 'migrations'),
+   push: false,
   }),
   sharp,
   plugins: [],
