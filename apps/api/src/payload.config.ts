@@ -34,6 +34,7 @@ export default buildConfig({
           ? process.env.BUILD_DATABASE || ''
           : process.env.DATABASE_URL || '',
     },
+     push: true,
   }),
   sharp,
   plugins: [],
