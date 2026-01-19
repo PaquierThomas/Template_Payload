@@ -32,8 +32,8 @@ export default buildConfig({
           ? process.env.BUILD_DATABASE || ''
           : process.env.DATABASE_URL || '',
     },
-    // ✅ Utilisez migrationDir pour des migrations persistantes
-   push: false,
+    // ✅ Push SEULEMENT si on n'est PAS en mode build
+    push: !isBuild,
   }),
   sharp,
   plugins: [],

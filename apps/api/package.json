@@ -7,7 +7,7 @@
   "scripts": {
     "build": "cross-env BUILD=true payload generate:types && payload generate:importmap && next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && next start -p ${PORT:-3000}",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start -p ${PORT:-3000}",
     "migrate": "payload migrate",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
